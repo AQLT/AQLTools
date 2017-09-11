@@ -1,0 +1,17 @@
+Package: AQLTools
+Type: Package
+Title: Fonctions usuelles et pratiques (ou pas)
+Version: 0.1.0
+Date: septembre 2017
+Author: Alain Quartier-la-Tente
+Maintainer: AQLT <alain.quartier@yahoo.fr>
+Description: Package pour rassembler des fonctions qui me suivent années après années.
+Depends:
+    rsdmx,
+    reshape2,
+    zoo,
+    ggplot2
+License: GPL-2 GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
