@@ -1,0 +1,71 @@
+---
+title: "Jongler entre R et le presse-papier"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Jongler entre R et le presse-papier}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, size = "small")
+```
+
+
+Un des problèmes auquel l'on est souvent confronté avec l'utilisation de R est l'importation ou l'exportation de données depuis un tableur (Excel ou Calc). Les solutions souvent utilisées sont l'utilisation de packages (tels que [XLConnect](https://cran.r-project.org/package=XLConnect), [readxl](https://cran.r-project.org/package=readxl) ou [xlsx](https://cran.r-project.org/package=xlsx)) qui permettent de le faire de façon stable. Toutefois, on souhaite parfois une solution simple et rapide comme un simple copier-coller : c'est en fait possible avec R en utilisant le *Clipboard* (presse-papier) ! Les fonction `ctrl_c()` et `ctrl_v()` permettent d'utiliser plus facilement et rapidement ce *Clipboard* : après avoir copié une table d'un tableaur, utiliser `ctrl_v()` sous R pour l'exporter ou, à l'inverse, pour exporter une table `x` de R vers un tableur utiliser `ctrl_c(x)` et ensuite coller le tableur (en appuyant par exemple sur Ctrl+V)
+
+## Importer des données depuis un tableur
+
+Pour importer des données depuis le presse-papier, il suffit d'utiliser la fonction `ctrl_v()`. Prenons par exemple le premier tableau de l'*Information Rapide* de l'enquête mensuelle de conjoncture dans l'industrie de juin 2017 (<https://www.insee.fr/fr/statistiques/2875875>) et l'ouvrir avec un tableur (en faisant par exemple un copier/coller) :
+```{r,echo=FALSE}
+require(AQLTools,quietly = T)
+require(DT,quietly = T)
+options(OutDec= ",",
+        DT.options = list(dom = 'Bt',
+                          buttons = list(list(
+                                             extend = 'excel',
+                                             text = 'Télécharger tableau'
+                                         )),
+                          language=list(decimal=",")
+        )
+)
+data<-matrix(c("Indicateur synthétique","100","106","108","109","108","Production passée","5","9","17","14","10","Stocks","13","7","6","5","6","Carnets de commandes globaux","-18","-9","-6","-5","-3","Carnets de commandes étrangers","-14","-5","-1","-2","-2","Perspectives personnelles de production","5","11","12","16","13","Perspectives générales de production","-9","3","1","7","17"),
+          nrow=7,byrow = T)
+data<-data.frame(data,stringsAsFactors = F)
+data[,-1]<-apply(data[,-1],2,as.numeric)
+colnames(data)<-c("Industrie manufacturière","Moy*","Mars-17","Avr-17","Mai-17","Juin-17")
+knitr::kable(data, caption = "",align=c("l",rep("c",5)))
+```
+
+Pour copier-coller le tableau en entier, commencez par sélectionner les colonnes concernées (par exemples les cellules A1 à F8 si le tableau commence en A1), appuyez sur Ctrl+C et utiliser sous R la fonction `ctrl_v()` :
+
+```{r,eval=FALSE}
+x <- ctrl_v()
+x
+```
+
+```{r,echo=F}
+# colnames(data)<-gsub("\\W","\\.",colnames(data))
+data
+```
+
+La fonction `ctrl_v()` utilise la fonction `read.table()` pour importer les données. On peut donc personnaliser l'importation des données (voir pour cela les paramètres de `read.table()`). En particulier :
+
+- **header** : booléen indiquant si la première ligne contient le nom des colonnes (par défaut c'est le cas dans `ctrl_v()`) ;  
+- **stringsAsFactors** : booléen indiquant s'il faut convertir les chaînes de caractères au format *factor* (par défaut ce n'est pas le cas dans `ctrl_v()`) ;  
+- **dec** : c'est le paramètre spécifiant le séparateur décimal du fichier lu. Par défaut c'est la virgule dans `ctrl_v()` car elle correspond au séparateur utilisé dans les tableurs francophone. Si l'on utilise une autre version d'un tableur c'est le point qui va être utilisé : utiliser dans ce cas l'option `dec = "."`.
+
+
+## Exporter les données depuis R vers un tableur
+
+Alors que pour importer les données depuis le presse-papiers on utilisait la fonction `ctrl_v()`, pour exporter les données sous Excel il faut tout simplement utiliser la fonction `ctrl_c()`. Cette dernière utilise la fonction `write.table()` : pour personnaliser l'export on peut donc modifier les paramètres de `write.table()`. En particulier :
+
+- **col.names** : paramètre indiquant s'il faut exporter le nom des colonnes (par défaut c'est le cas) ;
+- **row.names** : paramètre indiquant s'il faut exporter le nom des lignes (par défaut ce n'est pas le cas) ;  
+- **dec** : c'est le paramètre spécifiant le séparateur décimal à utiliser. Par défaut c'est la virgule qui est utilisé dans `ctrl_c()` (car c'est le séparateur décimal des tableurs francophones). Si l'on souhaite exporter dans un tableur non francophone il faut donc utiliser l'option `dec = "."`.
+
+
+Pour exporter la précédente table il suffit donc de lancer le code R suivant et de faire un Ctrl+V dans le tableur utilisé :
+```{r,eval=F}
+ctrl_c(x)
+```

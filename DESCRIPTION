@@ -5,12 +5,15 @@ Version: 0.1.0
 Date: septembre 2017
 Author: Alain Quartier-la-Tente
 Maintainer: AQLT <alain.quartier@yahoo.fr>
-Description: Package pour rassembler des fonctions qui me suivent années après années.
-Depends:
+Description: Package pour rassembler des fonctions qui me suivent ann?es apr?s ann?es.
+Imports:
+    ggplot2
+Suggests:
     rsdmx,
     reshape2,
     zoo,
-    ggplot2
+    knitr
+VignetteBuilder: knitr
 License: GPL-2 GPL-3
 Encoding: UTF-8
 LazyData: true

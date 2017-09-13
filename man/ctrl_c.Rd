@@ -3,40 +3,36 @@
 \encoding{UTF-8}
 \name{ctrl_c}
 \alias{ctrl_c}
-\title{Importer des données depuis le presse-papier}
+\title{Exporter des données vers le presse-papier}
 \usage{
-ctrl_c(header = TRUE, stringsAsFactors = FALSE, dec = ",", ...)
+ctrl_c(data, col.names = TRUE, row.names = FALSE, dec = ",", ...)
 }
 \arguments{
-\item{header}{booléen indiquant si la première ligne doit être
-interprétée comme les noms des colonnes (\code{TRUE} par défaut). Paramètre
-utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.}
+\item{data}{les données à exporter.}
 
-\item{stringsAsFactors}{booléen indiquant si l'on souhaite que les chaînes de
-charactères soient transformées en facteur dans la table de sortie.  Paramètre
-utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.
-(\code{FALSE} par défaut).}
+\item{col.names}{Booléen indiquant si l'on souhaite exporter les noms des colonnes (par défaut
+\code{col.names = TRUE})}
 
-\item{dec}{le caractère utilisé comme séparateur décimal dans les données du presse-papiers.
-Par défaut la virgule est utilisée : utiliser le point pour si les données proviennent d'un
-tableur non francophone. Paramètre utilisé uniquement si les données du presse-papier
-contiennent plusieurs colonnes.}
+\item{row.names}{Booléen indiquant si l'on souhaite exporter les noms des lignes (par défaut
+\code{row.names = FALSE})}
+
+\item{dec}{le caractère utilisé comme séparateur décimal dans le tableur où l'on souhaite
+exporter les données. Par défaut la virgule est utilisée : utiliser le point pour si l'on utilise
+tableur non francophone.}
 
 \item{...}{autres paramètres de \code{\link{read.table}} (uniquement si les données
-du presse-papie contiennent plusieurs colonnes)}
-}
-\value{
-Un vecteur de caractères s'il n'y a qu'une colonne, sinon un \code{\link{data.frame}}.
+du presse-papie contiennent plusieurs colonnes).}
 }
 \description{
-Fonction qui permet d'importer sous R des données depuis le presse-papiers.
-Ces données peuvent par exemple venir d'un tableur (Excel, Calc, etc.) :
-copier les données du tableur et ensuite lancer la fonction \code{ctr!_c()}
+Fonction qui permet d'exporter des données (un vecteur ou un \code{\link{data.frame}} par exemple)
+vers le presse-papier (pour ensuite les coller dans un tableur par exemple).
+}
+\details{
+Il est possible qu'il y ait une ligne en trop si la fonction est utilisée sous Mac Os.
 }
 \examples{
-# Après avec copié des données depuis un tableur
-ctrl_c()
+ctrl_c(c("line 1", "line 2 \\n and line 3"))
 }
 \seealso{
-\code{\link{ctrl_v}} pour exporter vers le presse-papier.
+\code{\link{ctrl_v}} pour importer depuis le presse-papier.
 }

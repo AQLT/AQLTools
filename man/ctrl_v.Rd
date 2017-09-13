@@ -3,23 +3,40 @@
 \encoding{UTF-8}
 \name{ctrl_v}
 \alias{ctrl_v}
-\title{Exporter des données vers le presse-papier}
+\title{Importer des données depuis le presse-papier}
 \usage{
-ctrl_v(data)
+ctrl_v(header = TRUE, stringsAsFactors = FALSE, dec = ",", ...)
 }
 \arguments{
-\item{data}{les données à exporter.}
+\item{header}{booléen indiquant si la première ligne doit être
+interprétée comme les noms des colonnes (\code{TRUE} par défaut). Paramètre
+utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.}
+
+\item{stringsAsFactors}{booléen indiquant si l'on souhaite que les chaînes de
+charactères soient transformées en facteur dans la table de sortie.  Paramètre
+utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.
+(\code{FALSE} par défaut).}
+
+\item{dec}{le caractère utilisé comme séparateur décimal dans les données du presse-papiers.
+Par défaut la virgule est utilisée : utiliser le point pour si les données proviennent d'un
+tableur non francophone. Paramètre utilisé uniquement si les données du presse-papier
+contiennent plusieurs colonnes.}
+
+\item{...}{autres paramètres de \code{\link{read.table}} (uniquement si les données
+du presse-papie contiennent plusieurs colonnes).}
+}
+\value{
+Un vecteur de caractères s'il n'y a qu'une colonne, sinon un \code{\link{data.frame}}.
 }
 \description{
-Fonction qui permet d'exporter des données (un vecteur ou un \code{\link{data.frame}} par exemple)
-vers le presse-papier (pour ensuite les coller dans un tableur par exemple).
-}
-\details{
-Il est possible qu'il y ait une ligne en trop si la fonction est utilisée sous Mac Os.
+Fonction qui permet d'importer sous R des données depuis le presse-papiers.
+Ces données peuvent par exemple venir d'un tableur (Excel, Calc, etc.) :
+copier les données du tableur et ensuite lancer sous R la fonction \code{ctr_v()}
 }
 \examples{
-ctrl_v(c("line 1", "line 2 \\n and line 3"))
+# Après avec copié des données depuis un tableur
+ctrl_v()
 }
 \seealso{
-\code{\link{ctrl_c}} pour importer depuis le presse-papier.
+\code{\link{ctrl_c}} pour exporter vers le presse-papier.
 }
