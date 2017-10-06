@@ -20,11 +20,19 @@ ev <- function(x){
 }
 #' @export
 ev.ts <- function(x){
-    (x/stats::lag(x, k = -1) - 1) * 100
+    result <- (x/stats::lag(x, k = -1) - 1) * 100
+    return(result)
+}
+#' @export
+ev.mts <- function(x){
+    result <- (x/stats::lag(x, k = -1) - 1) * 100
+    colnames(result) <- colnames(x)
+    return(result)
 }
 #' @export
 ev.xts <- function(x){
-    (x / stats::lag(x, k = 1) - 1) * 100
+    result <- (x / stats::lag(x, k = 1) - 1) * 100
+    return(result)
 }
 #' @rdname ts_utils
 #' @export
@@ -33,11 +41,19 @@ ga <- function(x){
 }
 #' @export
 ga.ts <- function(x){
-    (x/stats::lag(x, k = -stats::frequency(x)) -1) * 100
+    result <- (x/stats::lag(x, k = -stats::frequency(x)) -1) * 100
+    return(result)
+}
+#' @export
+ga.mts <- function(x){
+    result <- (x/stats::lag(x, k = -stats::frequency(x)) -1) * 100
+    colnames(result) <- colnames(x)
+    return(result)
 }
 #' @export
 ga.xts <- function(x){
-    (x/stats::lag(x, k = stats::frequency(x)) -1) * 100
+    result <- (x/stats::lag(x, k = stats::frequency(x)) -1) * 100
+    return(result)
 }
 
 #' Convertisseur tableau en ts
@@ -95,7 +111,7 @@ dmy_ts <- function(x, col_date = 1,sep_date = "/", frequence = NULL){
 
     if ( is.null(frequence) ){#On cherche la fréquence
         #On regarde le nombre maximal d'occurence de chaque année
-        frequence <- max(table(substr(dates,1,4)))
+        frequence <- max(table(substr(dates,5,8)))
     }
 
     prem_date <- as.numeric(c(substr(dates[1],5,8),substr(dates[1],3,4)))

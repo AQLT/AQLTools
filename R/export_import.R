@@ -38,13 +38,12 @@ ctrl_v <- function(header = TRUE, stringsAsFactors = FALSE,
   if (length(grep("\t",tableau)) > 0) {
     # Il y a plusieurs colonnes
     if (header) {
-      en_tete <- read.table(text = tableau [1], sep = "\t",
-                            header = FALSE, stringsAsFactors = FALSE)
+      en_tete <- read.delim(text = tableau [1], header = FALSE,
+                            stringsAsFactors = FALSE)
       tableau <- tableau [-1]
     }
-    tableau <- read.table(text = tableau, sep = "\t",
-               header = FALSE, stringsAsFactors = stringsAsFactors,
-               dec = dec, ...)
+    tableau <- read.delim(text = tableau, header = FALSE,
+                          stringsAsFactors = stringsAsFactors, dec = dec, ...)
     if (header) {
       colnames(tableau) <- en_tete[1,]
     }
@@ -76,6 +75,11 @@ ctrl_v <- function(header = TRUE, stringsAsFactors = FALSE,
 #' ctrl_c(c("line 1", "line 2 \n and line 3"))
 ctrl_c <- function(data, col.names = TRUE, row.names = FALSE, dec = ",", ...) {
   os <- Sys.info()[['sysname']]
+
+  if (!is.na(col.names) && col.names && row.names){
+      col.names <- NA
+  }
+
   if (os == "Windows") {
       write.table(x = data, file = "clipboard", sep = "\t",
                   col.names = col.names, row.names = row.names, dec = dec, ...)

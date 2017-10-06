@@ -29,10 +29,6 @@
 #'
 lectureBDM<-function(idbank, ...)
 {
-    if (!requireNamespace("rsdmx", quietly = TRUE))
-        stop("Il faut que le package rsdmx soit installé !")
-    if (!requireNamespace("reshape2", quietly = TRUE))
-        stop("Il faut que le package reshape2 soit installé !")
     #On récupère les idbank et on supprime les éventuels espaces
     idbank<-gsub(" ","",c(idbank,unlist(list(...))))
 
