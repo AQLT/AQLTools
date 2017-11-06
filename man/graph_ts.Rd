@@ -5,13 +5,18 @@
 \alias{graph_ts}
 \title{Graphique d'une série temporelle}
 \usage{
-graph_ts(data, titre = "", legende = NULL, afficheVolatilite = FALSE,
-  cex = 0.6, diviserParPeriode = FALSE)
+graph_ts(data, titre = NULL, sous_titre = NULL, legende = NULL,
+  afficheVolatilite = FALSE, cex = 0.6, diviserParPeriode = FALSE,
+  x_lab = NULL, y_lab = "Date", legend_justification = c(0, 0),
+  legend_position = c(0, 0), outDec = ",",
+  n_xlabel = length(time(data))\%/\%24, n_ylabel = 12)
 }
 \arguments{
 \item{data}{un objet de type \code{\link[stats]{ts}} contenant une ou plusieurs séries à grapher.}
 
 \item{titre}{titre du graphique (par défaut pas de titre).}
+
+\item{sous_titre}{sous-titre du graphique (par défaut pas de sous-titre).}
 
 \item{legende}{légende du graphique. Par défaut le nom des variables dans l'objet \code{data} en entrée. S'il n'y a qu'une série
 à tracer alors aucune légende n'est affichée.}
@@ -22,6 +27,23 @@ de leur variation). Par défaut \code{afficheVolatilite = FALSE} : on n'affiche 
 \item{cex}{nombre indiquant le montant par lequel le texte associé à la volatilité doit être mis à l'échelle par rapport à la
 valeur par défaut. Par défaut \code{cex = 0.6} : le texte est donc 60 \% plus petit que la valeur par défaut.
 Par exemple, pour des séries trimestrielles cela permet d'avoir un graphique par trimestre traçant chacun les valeurs associées à son trimestre.}
+
+\item{diviserParPeriode}{diviser le graphique en fonction de la période : il y aura en sortie autant de graphiques que de périodes dans la série de départ.}
+
+\item{x_lab}{titre axe des abscisses (par défaut aucun titre).}
+
+\item{y_lab}{titre axe des ordonnées (par défaut "Date").}
+
+\item{legend_justification}{(voir \code{\link[ggplot2]{theme}}).}
+
+\item{legend_position}{position de la légende ("none", "left", "right", "bottom", "top", ou un vecteur numérique de deux éléments),
+par défaut la légende en positionnée en bas à gauche du graphique (voir \code{\link[ggplot2]{theme}}).}
+
+\item{outDec}{séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).}
+
+\item{n_xlabel}{nombre de labels pour l'axe des abscisses (par défaut une année sur deux).}
+
+\item{n_ylabel}{nombre de labels pour l'axe des ordonnées (par défaut 12).}
 }
 \value{
 Un graphique \code{\link[ggplot2]{ggplot}}.
@@ -33,6 +55,6 @@ Fonction qui permet de faire des graphiques de séries temporelles à partir d'u
 data <- lectureBDM("001585942","001585980")
 legende <- c("Carnets de commandes globaux","Carnets de commandes étrangers")
 titre <- "Soldes d'opinion sur les carnets de commandes dans l'industrie manufacturière"
-graph_ts(data, titre = titre, legende = legende,afficheVolatilite = TRUE)
+graph_ts(data, titre = titre, legende = legende, afficheVolatilite = TRUE)
 graph_ts(data, titre = titre, legende = legende, diviserParPeriode = TRUE)
 }

@@ -75,7 +75,9 @@ ga.xts <- function(x){
 #' @return Un \code{\link[stats]{ts}}.
 #' @encoding UTF-8
 #' @examples
-#' x <- data.frame(dates=paste(rep(2000:2002,each=4),rep(c("01","04","07","10"),2),"01",sep="-"),donnees=1:12,stringsAsFactors = FALSE)
+#' x <- data.frame(dates=paste(rep(2000:2002, each=4),
+#' rep(c("01", "04", "07", "10"),2) ,"01", sep = "-"),
+#' donnees = 1:12, stringsAsFactors = FALSE)
 #' ymd_ts(x)
 #' @name data_to_ts
 #' @rdname data_to_ts
