@@ -5,7 +5,8 @@
 \alias{ctrl_c}
 \title{Exporter des données vers le presse-papier}
 \usage{
-ctrl_c(data, col.names = TRUE, row.names = FALSE, dec = ",", ...)
+ctrl_c(data, col.names = TRUE, row.names = FALSE, memory = 2^5,
+  dec = ",", ...)
 }
 \arguments{
 \item{data}{les données à exporter.}
@@ -15,6 +16,9 @@ ctrl_c(data, col.names = TRUE, row.names = FALSE, dec = ",", ...)
 
 \item{row.names}{Booléen indiquant si l'on souhaite exporter les noms des lignes (par défaut
 \code{row.names = FALSE})}
+
+\item{memory}{entier indiquant la taille maximale de l'objet à copier dans le presse-papier. Par défaut
+la limite est de 32 Kb (=2^5 Kb).}
 
 \item{dec}{le caractère utilisé comme séparateur décimal dans le tableur où l'on souhaite
 exporter les données. Par défaut la virgule est utilisée : utiliser le point pour si l'on utilise

@@ -15,9 +15,6 @@
 #' @param diviserParPeriode  diviser le graphique en fonction de la période : il y aura en sortie autant de graphiques que de périodes dans la série de départ.
 #' @param x_lab  titre axe des abscisses (par défaut aucun titre).
 #' @param y_lab  titre axe des ordonnées (par défaut "Date").
-#' @param legend_justification  (voir \code{\link[ggplot2]{theme}}).
-#' @param legend_position position de la légende ("none", "left", "right", "bottom", "top", ou un vecteur numérique de deux éléments),
-#' par défaut la légende en positionnée en bas à gauche du graphique (voir \code{\link[ggplot2]{theme}}).
 #' @param outDec séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).
 #' @param n_xlabel nombre de labels pour l'axe des abscisses (par défaut une année sur deux).
 #' @param n_ylabel nombre de labels pour l'axe des ordonnées (par défaut 12).
@@ -30,11 +27,10 @@
 #' graph_ts(data, titre = titre, legende = legende, afficheVolatilite = TRUE)
 #' graph_ts(data, titre = titre, legende = legende, diviserParPeriode = TRUE)
 #' @export
-graph_ts<-function(data, titre = NULL, sous_titre = NULL, legende = NULL, afficheVolatilite = FALSE,
-                   cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, y_lab = "Date",
-                   legend_justification = c(0,0), legend_position = c(0,0), outDec = ",",
-                   n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
-    require("ggplot2",quietly = TRUE)
+graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, afficheVolatilite = FALSE,
+                     cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, y_lab = "Date",
+                     outDec = ",",
+                     n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
@@ -43,11 +39,17 @@ graph_ts<-function(data, titre = NULL, sous_titre = NULL, legende = NULL, affich
     time <- time(data)
     freq <- frequency(data)
     dataGraph <- data.frame(cbind(time, data))
-    colnames(dataGraph) <- c("date", paste0("val", seq(ncol(dataGraph) - 1)))
-    valCouleurs <- gg_color_hue(ncol(dataGraph)-1)
-    names(valCouleurs) <- colnames(dataGraph)[-1]
+    if (is.null(legende)){
+        if(is.mts(data)){
+            legende <- colnames(data)
+        }else{
+            legende <- ""
+        }
+    }
+    colnames(dataGraph) <- c("date", legende)
 
     dataGraph <- reshape2::melt(dataGraph, id="date")  # convert to long format
+
     if (freq==2){
         periode <- ifelse(time(data)%%1==0, "S1", "S2")
         periode <- factor(periode,levels = c("S1","S2"), ordered = T)
@@ -61,35 +63,23 @@ graph_ts<-function(data, titre = NULL, sous_titre = NULL, legende = NULL, affich
         periode <- factor(periode,levels=capitalize(months(zoo::as.yearmon((0:11)/12))),ordered = T)
     }
 
-    dataGraph<-data.frame(dataGraph,periode=periode)
-    p<-ggplot(data=dataGraph,aes(x=date, y=value, group=variable,colour=variable))+
-        coord_cartesian(xlim=c(min(time)+0.5,max(time)-0.5)) +
-        geom_line(size=0.70)+theme_bw()
+    dataGraph <- data.frame(dataGraph,periode=periode)
+    p <- ggplot(data = dataGraph, aes(x = date, y = value, group = variable, colour = variable))+
+        coord_cartesian(xlim = c(min(time) + 0.5, max(time) - 0.5)) +
+        geom_line(size=0.70)
     #Paramètres graphiques (titre, labels etc.)
-    p<-p +
+    p <- p +
         labs(title = titre, subtitle = sous_titre,
              x = x_lab, y = y_lab) +
         scale_x_continuous(breaks = scales::pretty_breaks(n = n_xlabel),
                            labels = function(x) format(x, decimal.mark = outDec)) +
         scale_y_continuous(breaks = scales::pretty_breaks(n = n_ylabel),
                            labels = function(x) format(x, decimal.mark = outDec))+
-        theme(plot.title=element_text(hjust = 0.5),
-              legend.background = element_rect(
-                  fill=alpha('gray99', 0.4),colour="gray80",linetype = "solid"),
-              legend.justification = legend_justification, legend.position = legend_position,
-              legend.key = element_blank())
+        theme_aqltools()
 
-    if(is.mts(data)){#Il y a au moins 2 séries et on fait une légende
-        if (is.null(legende)){
-            legende <- colnames(data)
-        }
-
-        p <- p + scale_colour_manual(name=NULL,breaks = names(valCouleurs),
-                                     values = valCouleurs,
-                                     labels = legende)
-    }else{
+    if(!is.mts(data))
         p <- p + theme(legend.position="none")
-    }
+
     if(afficheVolatilite){
         if(is.mts(data)){#On a au moins deux variables
             volatilite <- round(apply(diff(data, 1), 2, sd, na.rm=TRUE), 1)
@@ -97,14 +87,16 @@ graph_ts<-function(data, titre = NULL, sous_titre = NULL, legende = NULL, affich
             volatilite <- round(sd(diff(data, 1), na.rm=TRUE), 1)
         }
 
-        volatilite <- gsub(".",",",format(volatilite,digits=1,nsmall=1),fixed=T)
+        volatilite <- format(volatilite, digits = 1, nsmall = 1,
+                             decimal.mark = outDec)
         texte <- paste(paste("Volatilité",legende,"=",volatilite),collapse = "\n")
-        texte <- grid::grobTree(grid::textGrob(texte, x=0.98,  y=0.94,hjust = 1,
-                                 gp=grid::gpar(col="black", cex=cex)))
+        texte <- grid::grobTree(grid::textGrob(texte, x = 0.98, y = 0.94,
+                                               hjust = 1,
+                                               gp = grid::gpar(col = "black", cex = cex)))
         p <- p + annotation_custom(texte)
     }
     if(diviserParPeriode){
-        p<-p+facet_wrap(~periode)
+        p <- p + facet_wrap(~periode)
     }
     p
 }
@@ -116,8 +108,21 @@ capitalize <- function(string){
     return(string)
 }
 
-#Couleurs ggplot
-gg_color_hue <- function(n) {
-    hues = seq(15, 375, length = n + 1)
-    hcl(h = hues, l = 65, c = 100)[1:n]
+theme_aqltools <- function (base_size = 11, base_family = "") {
+    theme_grey(base_size = base_size, base_family = base_family) %+replace%
+        theme(panel.background = element_rect(fill = "white", colour = NA),
+              panel.border = element_rect(fill = NA, colour = "grey20"),
+              panel.grid.major = element_line(colour = "grey92"),
+              panel.grid.minor = element_line(colour = "grey92", size = 0.25),
+              strip.background = element_rect(fill = "grey85", colour = "grey20"),
+              complete = TRUE,
+              plot.title = element_text(hjust = 0.5),
+              legend.background = element_rect(fill = alpha('gray99', 0.4),
+                                               colour = "gray80", linetype = "solid"),
+              legend.justification = c(0,0),
+              legend.position = c(0,0),
+              legend.key = element_blank(),
+              legend.title = element_blank()
+              )
 }
+

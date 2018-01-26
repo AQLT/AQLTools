@@ -6,15 +6,17 @@ Author: Alain Quartier-la-Tente
 Maintainer: AQLT <alain.quartier@yahoo.fr>
 Description: Package pour rassembler des fonctions qui me suivent années après années.
 Imports:
-    ggplot2,
     grid,
     rsdmx,
     reshape2,
     scales,
+    stats,
     zoo
 Suggests:
     knitr,
     rmarkdown
+Depends:
+    ggplot2
 VignetteBuilder: knitr
 License: GPL-2
 Encoding: UTF-8

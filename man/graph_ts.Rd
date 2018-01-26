@@ -7,8 +7,7 @@
 \usage{
 graph_ts(data, titre = NULL, sous_titre = NULL, legende = NULL,
   afficheVolatilite = FALSE, cex = 0.6, diviserParPeriode = FALSE,
-  x_lab = NULL, y_lab = "Date", legend_justification = c(0, 0),
-  legend_position = c(0, 0), outDec = ",",
+  x_lab = NULL, y_lab = "Date", outDec = ",",
   n_xlabel = length(time(data))\%/\%24, n_ylabel = 12)
 }
 \arguments{
@@ -33,11 +32,6 @@ Par exemple, pour des séries trimestrielles cela permet d'avoir un graphique pa
 \item{x_lab}{titre axe des abscisses (par défaut aucun titre).}
 
 \item{y_lab}{titre axe des ordonnées (par défaut "Date").}
-
-\item{legend_justification}{(voir \code{\link[ggplot2]{theme}}).}
-
-\item{legend_position}{position de la légende ("none", "left", "right", "bottom", "top", ou un vecteur numérique de deux éléments),
-par défaut la légende en positionnée en bas à gauche du graphique (voir \code{\link[ggplot2]{theme}}).}
 
 \item{outDec}{séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).}
 

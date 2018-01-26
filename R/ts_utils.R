@@ -55,6 +55,43 @@ ga.xts <- function(x){
     result <- (x/stats::lag(x, k = stats::frequency(x)) -1) * 100
     return(result)
 }
+#' Volatilité
+#'
+#' Fonction qui permet de calculer la volatité d'une série temporelle (i.e. : l'écart-type de sa différence). Les
+#' valeurs manquantes ne sont pas prises en compte.
+#'
+#' @param x un objet de type \code{\link[stats]{ts}} ou \code{\link[xts]{xts}}.
+#' @param lag nombre de retards à utiliser pour le calcul de la différence (par défaut \code{lag = 1} : on calcule une
+#' différence mensuelle pour les séries mensuelles).
+#' @return Un objet de même type que celui en entrée.
+#' @encoding UTF-8
+#' @examples
+#' x  <-  ts(1:10, frequency = 4, start = c(1959, 2))
+#' volatilite(x)
+#' @name volatilite
+#' @export
+volatilite <- function(x, lag = 1){
+    UseMethod("volatilite", x)
+}
+#' @export
+volatilite.ts <- function(x, lag = 1){
+    result <- sd(base::diff(x, lag), na.rm = TRUE)
+    return(result)
+}
+#' @export
+volatilite.mts <- function(x, lag = 1){
+    result <- base::diff(x, lag)
+    result <- apply(result,2,sd, na.rm = TRUE)
+    colnames(result) <- colnames(x)
+    return(result)
+}
+#' @export
+volatilite.xts <- function(x, lag = 1){
+    result <- base::diff(x, lag)
+    result <- apply(result,2,sd, na.rm = TRUE)
+    colnames(result) <- colnames(x)
+    return(result)
+}
 
 #' Convertisseur tableau en ts
 #'

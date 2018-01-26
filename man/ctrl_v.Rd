@@ -5,17 +5,21 @@
 \alias{ctrl_v}
 \title{Importer des données depuis le presse-papier}
 \usage{
-ctrl_v(header = TRUE, stringsAsFactors = FALSE, dec = ",", ...)
+ctrl_v(header = TRUE, row.names, stringsAsFactors = FALSE, dec = ",", ...)
 }
 \arguments{
 \item{header}{booléen indiquant si la première ligne doit être
 interprétée comme les noms des colonnes (\code{TRUE} par défaut). Paramètre
 utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.}
 
+\item{row.names}{un vecteur contenant les noms des lignes. Cela peut être un vecteur contenant les noms des lignes,
+un entier donnant le numéro de la colonne contenant les noms des lignes ou une chaîne de caractères donnant
+le nom de la colonne qui contient les noms des lignes. Lorsque \code{row.names = NULL} alors les lignes sont
+numérotées.}
+
 \item{stringsAsFactors}{booléen indiquant si l'on souhaite que les chaînes de
-charactères soient transformées en facteur dans la table de sortie.  Paramètre
-utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.
-(\code{FALSE} par défaut).}
+charactères soient transformées en facteur dans la table de sortie (\code{FALSE} par défaut).
+Paramètre utilisé uniquement si les données du presse-papier contiennent plusieurs colonnes.}
 
 \item{dec}{le caractère utilisé comme séparateur décimal dans les données du presse-papiers.
 Par défaut la virgule est utilisée : utiliser le point pour si les données proviennent d'un
@@ -23,7 +27,7 @@ tableur non francophone. Paramètre utilisé uniquement si les données du press
 contiennent plusieurs colonnes.}
 
 \item{...}{autres paramètres de \code{\link{read.table}} (uniquement si les données
-du presse-papie contiennent plusieurs colonnes).}
+du presse-papier contiennent plusieurs colonnes).}
 }
 \value{
 Un vecteur de caractères s'il n'y a qu'une colonne, sinon un \code{\link{data.frame}}.
