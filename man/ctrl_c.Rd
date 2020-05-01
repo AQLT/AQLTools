@@ -5,8 +5,7 @@
 \alias{ctrl_c}
 \title{Exporter des données vers le presse-papier}
 \usage{
-ctrl_c(data, col.names = TRUE, row.names = FALSE, memory = 2^5,
-  dec = ",", ...)
+ctrl_c(data, col.names = TRUE, row.names = FALSE, memory = 2^5, dec = ",", ...)
 }
 \arguments{
 \item{data}{les données à exporter.}
@@ -35,7 +34,7 @@ vers le presse-papier (pour ensuite les coller dans un tableur par exemple).
 Il est possible qu'il y ait une ligne en trop si la fonction est utilisée sous Mac Os.
 }
 \examples{
-ctrl_c(c("line 1", "line 2 \\n and line 3"))
+ctrl_c(c("line 1", "line 2 \n and line 3"))
 }
 \seealso{
 \code{\link{ctrl_v}} pour importer depuis le presse-papier.
