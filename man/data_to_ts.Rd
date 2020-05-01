@@ -7,17 +7,16 @@
 \alias{dmy_ts}
 \title{Convertisseur tableau en ts}
 \usage{
-ymd_ts(x, col_date = 1, sep_date = "/", frequence = NULL)
+ymd_ts(x, col_date = 1, sep_date, frequence = NULL)
 
-dmy_ts(x, col_date = 1, sep_date = "/", frequence = NULL)
+dmy_ts(x, col_date = 1, sep_date, frequence = NULL)
 }
 \arguments{
 \item{x}{table contenant au moins deux colonnes dont une avec des dates.}
 
 \item{col_date}{numéro ou nom de la colonne contenant les dates (par défaut c'est la première colonne).}
 
-\item{sep_date}{caractère utilisé pour séparé le jour, le mois et l'année (par défaut \code{col_date = "/"}
-c'est-à-dire que les dates sont au format JJ/MM/AAAA ou AAAA/MM/JJ).}
+\item{sep_date}{caractère utilisé pour séparé le jour, le mois et l'année. Détection automatique par défaut.}
 
 \item{frequence}{fréquence de l'objet \code{\link[stats]{ts}}. Par défaut la fonction fait une recherche automatique
 (il peut y avoir des problèmes si l'on n'a pas d'année entière connue).}
@@ -37,7 +36,7 @@ paramètre \code{sep_date}.
 }
 \examples{
 x <- data.frame(dates=paste(rep(2000:2002, each=4),
-rep(c("01", "04", "07", "10"),2) ,"01", sep = "-"),
-donnees = 1:12, stringsAsFactors = FALSE)
+                            rep(c("01", "04", "07", "10"),2) ,"01", sep = "-"),
+                donnees = 1:12, stringsAsFactors = FALSE)
 ymd_ts(x)
 }
