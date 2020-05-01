@@ -133,7 +133,7 @@ ymd_ts <- function(x, col_date = 1, sep_date, frequence = NULL){
         frequence <- max(table(substr(dates,1,4)))
     }
 
-    if(nchar(dates)>4){
+    if(nchar(dates[1])>4){
         prem_date <- as.numeric(c(substr(dates[1],1,4),substr(dates[1],5,6)))
         prem_date <- prem_date[1] + (prem_date[2]-1)/frequence
     }else{
@@ -162,7 +162,7 @@ dmy_ts <- function(x, col_date = 1,sep_date, frequence = NULL){
         frequence <- max(table(substr(dates,5,8)))
     }
 
-    if(nchar(dates)>4){
+    if(nchar(dates[1])>4){
         prem_date <- as.numeric(c(substr(dates[1],5,8),substr(dates[1],3,4)))
         prem_date <- prem_date[1] + (prem_date[2]-1)/frequence
     }else{
