@@ -14,6 +14,7 @@
 #' Par exemple, pour des séries trimestrielles cela permet d'avoir un graphique par trimestre traçant chacun les valeurs associées à son trimestre.
 #' @param diviserParPeriode  diviser le graphique en fonction de la période : il y aura en sortie autant de graphiques que de périodes dans la série de départ.
 #' @param x_lab  titre axe des abscisses (par défaut aucun titre).
+#' @param x_lab_month boolean indiquant si on veut que les x_labels soit formatés avec le moois
 #' @param y_lab  titre axe des ordonnées (par défaut "Date").
 #' @param outDec séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).
 #' @param n_xlabel nombre de labels pour l'axe des abscisses (par défaut une année sur deux).
@@ -28,13 +29,14 @@
 #' graph_ts(data, titre = titre, legende = legende, diviserParPeriode = TRUE)
 #' @export
 graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, afficheVolatilite = FALSE,
-                     cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, y_lab = "Date",
+                     cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, x_lab_month = FALSE, y_lab = "Date",
                      outDec = ",",
                      n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
-
+    if(!require(ggplot2))
+        stop("Il faut installer ggplot2")
 
     time <- time(data)
     freq <- frequency(data)
@@ -50,6 +52,10 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
 
     dataGraph <- reshape2::melt(dataGraph, id="date")  # convert to long format
 
+    if (freq==1){
+        periode <- "Y"
+        periode <- factor(periode)
+    }
     if (freq==2){
         periode <- ifelse(time(data)%%1==0, "S1", "S2")
         periode <- factor(periode,levels = c("S1","S2"), ordered = T)
@@ -72,7 +78,7 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
         labs(title = titre, subtitle = sous_titre,
              x = x_lab, y = y_lab) +
         scale_x_continuous(breaks = scales::pretty_breaks(n = n_xlabel),
-                           labels = function(x) format(x, decimal.mark = outDec)) +
+                           labels = function(x) creation_x_label(x, x_lab_month = x_lab_month, outDec = outDec)) +
         scale_y_continuous(breaks = scales::pretty_breaks(n = n_ylabel),
                            labels = function(x) format(x, decimal.mark = outDec))+
         theme_aqltools()
@@ -100,12 +106,79 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
     }
     p
 }
-
+#
+# graph_ts_simple <- function(data, titre = NULL, sous_titre = NULL, legende = NULL,
+#                      cex = 0.6, x_lab = NULL, x_lab_month = FALSE, y_lab = "Date",
+#                      outDec = ",",
+#                      n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
+#     if(!require(ggplot2))
+#         stop("Il faut installer ggplot2")
+#     if (!is.ts(data))
+#         stop("Il faut que la table en entrée soit de type ts !")
+#
+#
+#     time <- time(data)
+#     freq <- frequency(data)
+#     dataGraph <- data.frame(cbind(time, data))
+#     if (is.null(legende)){
+#         if(is.mts(data)){
+#             legende <- colnames(data)
+#         }else{
+#             legende <- ""
+#         }
+#     }
+#     colnames(dataGraph) <- c("date", legende)
+#
+#     dataGraph <- reshape2::melt(dataGraph, id="date")  # convert to long format
+#
+#     if (freq==1){
+#         periode <- "Y"
+#         periode <- factor(periode)
+#     }
+#     if (freq==2){
+#         periode <- ifelse(time(data)%%1==0, "S1", "S2")
+#         periode <- factor(periode,levels = c("S1","S2"), ordered = T)
+#     }
+#     if (freq==4){
+#         periode <- capitalize(quarters(zoo::as.yearqtr(dataGraph$date)))
+#         periode <- factor(periode,levels=capitalize(quarters(zoo::as.yearqtr((0:3)/4))),ordered = T)
+#     }
+#     if (freq==12){
+#         periode <- capitalize(months(zoo::as.yearmon(dataGraph$date)))
+#         periode <- factor(periode,levels=capitalize(months(zoo::as.yearmon((0:11)/12))),ordered = T)
+#     }
+#
+#     dataGraph <- data.frame(dataGraph,periode=periode)
+#     p <- ggplot(data = dataGraph, aes(x = date, y = value, group = variable, colour = variable))+
+#         coord_cartesian(xlim = c(min(time) + 0.5, max(time) - 0.5)) +
+#         geom_line(size=0.70)
+#     #Paramètres graphiques (titre, labels etc.)
+#     p <- p +
+#         labs(title = titre, subtitle = sous_titre,
+#              x = x_lab, y = y_lab) +
+#         scale_x_continuous(breaks = scales::pretty_breaks(n = n_xlabel),
+#                            labels = function(x) creation_x_label(x, x_lab_month = x_lab_month, outDec = outDec)) +
+#         scale_y_continuous(breaks = scales::pretty_breaks(n = n_ylabel),
+#                            labels = function(x) format(x, decimal.mark = outDec))+
+#         theme_aqltools()
+#
+#     if(!is.mts(data))
+#         p <- p + theme(legend.position="none")
+#     p
+# }
 #On le reprend le code de la fonction du package Hmisc
 capitalize <- function(string){
     capped <- grep("^[A-Z]", string, invert = TRUE)
     substr(string[capped], 1, 1) <- toupper(substr(string[capped],1, 1))
     return(string)
+}
+
+creation_x_label <- function(x, x_lab_month = FALSE, outDec = ","){
+    if(x_lab_month){
+        zoo::as.yearmon(x)
+    }else{
+        format(x, decimal.mark = outDec)
+    }
 }
 
 theme_aqltools <- function (base_size = 11, base_family = "") {
@@ -125,4 +198,3 @@ theme_aqltools <- function (base_size = 11, base_family = "") {
               legend.title = element_blank()
               )
 }
-

@@ -5,10 +5,21 @@
 \alias{graph_ts}
 \title{Graphique d'une série temporelle}
 \usage{
-graph_ts(data, titre = NULL, sous_titre = NULL, legende = NULL,
-  afficheVolatilite = FALSE, cex = 0.6, diviserParPeriode = FALSE,
-  x_lab = NULL, y_lab = "Date", outDec = ",",
-  n_xlabel = length(time(data))\%/\%24, n_ylabel = 12)
+graph_ts(
+  data,
+  titre = NULL,
+  sous_titre = NULL,
+  legende = NULL,
+  afficheVolatilite = FALSE,
+  cex = 0.6,
+  diviserParPeriode = FALSE,
+  x_lab = NULL,
+  x_lab_month = FALSE,
+  y_lab = "Date",
+  outDec = ",",
+  n_xlabel = length(time(data))\%/\%24,
+  n_ylabel = 12
+)
 }
 \arguments{
 \item{data}{un objet de type \code{\link[stats]{ts}} contenant une ou plusieurs séries à grapher.}
@@ -30,6 +41,8 @@ Par exemple, pour des séries trimestrielles cela permet d'avoir un graphique pa
 \item{diviserParPeriode}{diviser le graphique en fonction de la période : il y aura en sortie autant de graphiques que de périodes dans la série de départ.}
 
 \item{x_lab}{titre axe des abscisses (par défaut aucun titre).}
+
+\item{x_lab_month}{boolean indiquant si on veut que les x_labels soit formatés avec le moois}
 
 \item{y_lab}{titre axe des ordonnées (par défaut "Date").}
 
