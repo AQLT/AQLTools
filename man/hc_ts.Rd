@@ -16,7 +16,8 @@ hc_lines(
   x_lab = NULL,
   y_lab = "Date",
   outDec = ",",
-  useHTML = FALSE
+  useHTML = FALSE,
+  digits
 )
 
 hc_stocks(
@@ -30,7 +31,8 @@ hc_stocks(
   outDec = ",",
   useHTML = FALSE,
   type = NULL,
-  color = NULL
+  color = NULL,
+  digits
 )
 }
 \arguments{
@@ -52,6 +54,8 @@ hc_stocks(
 \item{outDec}{séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).}
 
 \item{useHTML}{Booléen indiquant si l'on veut utiliser du code HTML dans les titres.}
+
+\item{digits}{nombre de chiffres après la virgule.}
 
 \item{type}{vecteur contenant le type à utiliser pour les séries (par défaut \code{"lines"}).}
 

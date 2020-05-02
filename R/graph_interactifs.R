@@ -14,6 +14,7 @@
 #' @param useHTML Booléen indiquant si l'on veut utiliser du code HTML dans les titres.
 #' @param type vecteur contenant le type à utiliser pour les séries (par défaut \code{"lines"}).
 #' @param color vecteur contenant les couleurs à utiliser (par défaut on garde les couleurs de highchart).
+#' @param digits nombre de chiffres après la virgule.
 #' @return Un graphique \code{\link[highcharter]{highcharter}}.
 #' @encoding UTF-8
 #' @examples
@@ -29,7 +30,8 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
                      legende = NULL,
                      affiche_legende = TRUE,
                      x_lab = NULL, y_lab = "Date",
-                     outDec = ",", useHTML = FALSE){
+                     outDec = ",", useHTML = FALSE,
+                     digits){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
@@ -49,6 +51,11 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
 
     dataGraph <- reshape2::melt(dataGraph, id="date")  # convert to long format
 
+    hcoptslang_nouv <- hcoptslang <- getOption("highcharter.lang")
+    hcoptslang_nouv$decimalPoint <- outDec
+    options(highcharter.lang = hcoptslang_nouv)
+    on.exit(options(highcharter.lang = hcoptslang_nouv))
+
     hc <- hchart(dataGraph,
                  "line",
                  highcharter::hcaes(x = date, y = value, group = variable)) %>%
@@ -66,6 +73,11 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
             hc_subtitle(text = sous_titre,
                         useHTML = useHTML)
     }
+    if(!missing(digits)){
+        hc <- hc %>%
+            hc_tooltip(pointFormat = sprintf('{series.name}: <b>{point.y:.%if}</b><br/>',
+                                             digits))
+    }
    hc
 }
 #' @name hc_ts
@@ -76,7 +88,8 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                      affiche_legende = TRUE,
                      x_lab = NULL, y_lab = "Date",
                      outDec = ",", useHTML = FALSE,
-                     type = NULL, color = NULL){
+                     type = NULL, color = NULL,
+                     digits){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
@@ -101,8 +114,14 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
         color_list <- lapply(list_ts, function(x) NULL)
     }
 
+    hcoptslang_nouv <- hcoptslang <- getOption("highcharter.lang")
+    hcoptslang_nouv$decimalPoint <- outDec
+    options(highcharter.lang = hcoptslang_nouv)
+    on.exit(options(highcharter.lang = hcoptslang_nouv))
 
-    hc <- highchart(type = "stock")  %>%
+
+    hc <- highchart(type = "stock",
+                    hc_opts = list(lang = list(decimalPoint = ",")))  %>%
         hc_xAxis(title = list(text = x_lab, useHTML = useHTML)) %>%
         hc_yAxis(title = list(text = y_lab, useHTML = useHTML)) %>%
         hc_legend(enabled = affiche_legende)
@@ -113,7 +132,6 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                           id = paste0("id",i),
                           type = type_list[[i]],
                           color = color_list[[i]])
-
     }
     if(!is.null(titre)){
         hc <- hc %>%
@@ -125,10 +143,11 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
             hc_subtitle(text = sous_titre,
                         useHTML = useHTML)
     }
-    if(is.mts(data)){
-        legende <- colnames(data)
-    }else{
-        legende <- ""
+
+    if(!missing(digits)){
+        hc <- hc %>%
+            hc_tooltip(pointFormat = sprintf('{series.name}: <b>{point.y:.%if}</b><br/>',
+                                             digits))
     }
 
     hc
