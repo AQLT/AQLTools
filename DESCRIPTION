@@ -1,12 +1,12 @@
 Package: AQLTools
-Title: Fonctions usuelles et pratiques (ou pas)
+Title: AQLT Toolkit
 Version: 0.1.0
 Date: septembre 2017
 Authors@R: c(
   person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
                  email = "alain.quartier@yahoo.fr",
                  comment = c(ORCID = "0000-0001-7890-3857")))
-Description: Package pour rassembler des fonctions qui me suivent années après années.
+Description: Boîte à outils de fonctions, surtout autour des séries temporelles.
 Imports:
     ggplot2,
     highcharter,

@@ -1,4 +1,4 @@
-Package qui rassemble des fonctions diverses et variées écrites durant ces dernières années, parfois utiles, parfois non.
+AQLT Toolkit : boîte à outils de fonctions, essentiellement autour du traitement de séries temporelles.
 
 Installation
 ------------
