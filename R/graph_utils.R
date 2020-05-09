@@ -29,7 +29,7 @@
 #' graph_ts(data, titre = titre, legende = legende, diviserParPeriode = TRUE)
 #' @export
 graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, afficheVolatilite = FALSE,
-                     cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, x_lab_month = FALSE, y_lab = "Date",
+                     cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, x_lab_month = FALSE, y_lab = NULL,
                      outDec = ",",
                      n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
 

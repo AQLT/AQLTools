@@ -14,7 +14,7 @@ hc_lines(
   legende = NULL,
   affiche_legende = TRUE,
   x_lab = NULL,
-  y_lab = "Date",
+  y_lab = NULL,
   outDec = ",",
   useHTML = FALSE,
   digits
@@ -27,7 +27,7 @@ hc_stocks(
   legende = NULL,
   affiche_legende = TRUE,
   x_lab = NULL,
-  y_lab = "Date",
+  y_lab = NULL,
   outDec = ",",
   useHTML = FALSE,
   type = NULL,

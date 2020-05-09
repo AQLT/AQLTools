@@ -15,7 +15,7 @@ graph_ts(
   diviserParPeriode = FALSE,
   x_lab = NULL,
   x_lab_month = FALSE,
-  y_lab = "Date",
+  y_lab = NULL,
   outDec = ",",
   n_xlabel = length(time(data))\%/\%24,
   n_ylabel = 12

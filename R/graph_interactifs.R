@@ -29,7 +29,7 @@
 hc_lines <- function(data, titre = NULL, sous_titre = NULL,
                      legende = NULL,
                      affiche_legende = TRUE,
-                     x_lab = NULL, y_lab = "Date",
+                     x_lab = NULL, y_lab = NULL,
                      outDec = ",", useHTML = FALSE,
                      digits){
 
@@ -86,7 +86,7 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
 hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                      legende = NULL,
                      affiche_legende = TRUE,
-                     x_lab = NULL, y_lab = "Date",
+                     x_lab = NULL, y_lab = NULL,
                      outDec = ",", useHTML = FALSE,
                      type = NULL, color = NULL,
                      digits){
@@ -109,9 +109,15 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
 
     if(is.null(type)){
         type_list <- lapply(list_ts, function(x) "line")
+    }else{
+        type_list <- rep(type, length(list_ts))[1:length(list_ts)]
+        type_list <- as.list(type_list)
     }
     if(is.null(color)){
         color_list <- lapply(list_ts, function(x) NULL)
+    }else{
+        color_list <- rep(color, length(list_ts))[1:length(list_ts)]
+        color_list <- as.list(color_list)
     }
 
     hcoptslang_nouv <- hcoptslang <- getOption("highcharter.lang")
