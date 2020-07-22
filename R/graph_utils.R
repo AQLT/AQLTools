@@ -71,7 +71,7 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
 
     dataGraph <- data.frame(dataGraph,periode=periode)
     p <- ggplot(data = dataGraph, aes(x = date, y = value, group = variable, colour = variable))+
-        coord_cartesian(xlim = c(min(time) + 0.5, max(time) - 0.5)) +
+        # coord_cartesian(xlim = c(min(time) + 0.5, max(time) - 0.5)) +
         geom_line(size=0.70)
     #Paramètres graphiques (titre, labels etc.)
     p <- p +

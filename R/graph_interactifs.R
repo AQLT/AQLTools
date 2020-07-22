@@ -129,8 +129,7 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
     hc <- highchart(type = "stock",
                     hc_opts = list(lang = list(decimalPoint = ",")))  %>%
         hc_xAxis(title = list(text = x_lab, useHTML = useHTML)) %>%
-        hc_yAxis(title = list(text = y_lab, useHTML = useHTML)) %>%
-        hc_legend(enabled = affiche_legende)
+        hc_yAxis(title = list(text = y_lab, useHTML = useHTML))
     for(i in seq_along(list_ts)){
        hc <-  hc %>%
             hc_add_series(data = list_ts[[i]],
@@ -156,6 +155,7 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                                              digits))
     }
 
-    hc
+    hc %>%
+        hc_legend(enabled = affiche_legende)
 }
 
