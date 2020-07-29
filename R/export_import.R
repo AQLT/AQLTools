@@ -32,11 +32,13 @@ ctrl_v <- function(header = TRUE, row.names, stringsAsFactors = FALSE,
   os <- Sys.info()[['sysname']]
   if (os == "Windows") {
     tableau <- utils::readClipboard()
+    file <- "clipboard"
   } else if (os == "Darwin") {
     # Pour mac
-    clip_r_mac <- base::pipe("pbpaste")
-    tableau <- base::readLines(clip_r_mac)
-    base::close(clip_r_mac)
+    file <- base::pipe("pbpaste")
+    tableau <- base::readLines(file)
+    base::close(file)
+    file <- base::pipe("pbpaste")
   }
   if (length(grep("\t",tableau)) > 0) {
     # Il y a plusieurs colonnes
@@ -49,7 +51,6 @@ ctrl_v <- function(header = TRUE, row.names, stringsAsFactors = FALSE,
                   rowvar <- (1L:ncol(en_tete))[match(en_tete, row.names, 0L) ==
                                           1L]
                   en_tete <- en_tete[-rowvar]
-                  row.names <- rowvar
               }
           }
           else if (is.numeric(row.names) && length(row.names) == 1L) {
@@ -57,16 +58,16 @@ ctrl_v <- function(header = TRUE, row.names, stringsAsFactors = FALSE,
               en_tete <- en_tete[-rowvar]
           }
       }
-      tableau <- tableau [-1]
     }
 
+
     if(!missing(row.names)){
-        tableau <- utils::read.delim(text = tableau, header = FALSE,
+        tableau <- utils::read.delim(file = file, header = header,
                                      stringsAsFactors = stringsAsFactors, dec = dec,
                                      row.names = row.names, ...)
     }else{
-        tableau <- utils::read.delim(text = tableau, header = FALSE,
-                                     stringsAsFactors = stringsAsFactors, dec = dec, ...)
+        tableau <- utils::read.delim(file = file, header = header,
+                                     stringsAsFactors = stringsAsFactors, dec = dec)
     }
 
     if (header) {
