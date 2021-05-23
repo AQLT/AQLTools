@@ -121,4 +121,42 @@ ctrl_c <- function(data, col.names = TRUE, row.names = FALSE, memory = 2^5, dec 
   return(invisible(NULL))
 }
 
+#' Exporter données ts vers un fichier excel
+#'
+#' Fonction qui permet d'exporter des données \code{ts} vers un fichier excel
+#' en créant une colonne date qui sera au format date.
+#'
+#' @param x un objet de type \code{\link[stats]{ts}}.
+#' @param file nom du fichier excel (avec extension .xls ou .xlsx)
+#' @param sheet nom de la feuille
+#' @param format format en sortie dans Excel
+#' @export
+#' @importFrom stats cor end factanal frequency is.mts is.ts lag sd start time ts window
+#' @importFrom XLConnect createSheet getOrCreateCellStyle loadWorkbook saveWorkbook setCellStyle setColumnWidth setDataFormat writeWorksheet
+ts2xls <- function(x, file, sheet="Feuille 1", format = "dd/mm/yyyy"){
+  wb <- loadWorkbook(file, create = TRUE)
+  createSheet(wb, sheet)
+  if(is.mts(x)){
+    col <- c("date", colnames(x))
+  }else{
+    col <- c("date", "x")
+  }
+  writeWorksheet(wb,matrix(col,nrow = 1),
+                 sheet = sheet,startCol = 1,startRow =1,
+                 header = FALSE)
 
+  csDate <- getOrCreateCellStyle(wb, name = "date")
+  setDataFormat(csDate, format = format)
+  date <- as.Date(format(zoo::as.Date((time(x))), "%d/%m/%Y"),
+                  "%d/%m/%Y")
+  writeWorksheet(wb,date,sheet = sheet,startCol = 1,startRow = 2,
+                 header = FALSE)
+  setCellStyle(wb, sheet = sheet, row = seq_along(date)+1,
+               col = 1,
+               cellstyle = csDate)
+
+  writeWorksheet(wb,x,sheet = sheet,startCol = 2,startRow = 2,
+                 header = FALSE)
+  setColumnWidth(wb, sheet, column = seq_along(col), width = -1)
+  saveWorkbook(wb, file)
+}

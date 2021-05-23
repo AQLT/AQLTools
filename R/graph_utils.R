@@ -19,6 +19,8 @@
 #' @param outDec séparateur décimal utilisé pour dans la légende des axes (par défaut la virgule).
 #' @param n_xlabel nombre de labels pour l'axe des abscisses (par défaut une année sur deux).
 #' @param n_ylabel nombre de labels pour l'axe des ordonnées (par défaut 12).
+#' @param prec_plot graphique à ajouter avant le geom_line
+#' @param size taille des points.
 #' @return Un graphique \code{\link[ggplot2]{ggplot}}.
 #' @encoding UTF-8
 #' @examples
@@ -27,16 +29,16 @@
 #' titre <- "Soldes d'opinion sur les carnets de commandes dans l'industrie manufacturière"
 #' graph_ts(data, titre = titre, legende = legende, afficheVolatilite = TRUE)
 #' graph_ts(data, titre = titre, legende = legende, diviserParPeriode = TRUE)
+#' @import ggplot2
 #' @export
 graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, afficheVolatilite = FALSE,
                      cex = 0.6, diviserParPeriode = FALSE, x_lab = NULL, x_lab_month = FALSE, y_lab = NULL,
                      outDec = ",",
-                     n_xlabel = length(time(data)) %/% 24, n_ylabel = 12){
+                     n_xlabel = length(time(data)) %/% 24, n_ylabel = 12,
+                     prec_plot, size = 0.70){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
-    if(!require(ggplot2))
-        stop("Il faut installer ggplot2")
 
     time <- time(data)
     freq <- frequency(data)
@@ -70,11 +72,17 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
     }
 
     dataGraph <- data.frame(dataGraph,periode=periode)
-    p <- ggplot(data = dataGraph, aes(x = date, y = value, group = variable, colour = variable))+
         # coord_cartesian(xlim = c(min(time) + 0.5, max(time) - 0.5)) +
-        geom_line(size=0.70)
+    if(!missing(prec_plot)){
+        p <- prec_plot
+    } else {
+        p <- ggplot()
+    }
+
     #Paramètres graphiques (titre, labels etc.)
     p <- p +
+        geom_line(mapping = aes(x = date, y = value, group = variable, colour = variable),
+                  size=size, data = dataGraph) +
         labs(title = titre, subtitle = sous_titre,
              x = x_lab, y = y_lab) +
         scale_x_continuous(breaks = scales::pretty_breaks(n = n_xlabel),
@@ -106,6 +114,8 @@ graph_ts <- function(data, titre = NULL, sous_titre = NULL, legende = NULL, affi
     }
     p
 }
+
+globalVariables(c("value", "variable"))
 #
 # graph_ts_simple <- function(data, titre = NULL, sous_titre = NULL, legende = NULL,
 #                      cex = 0.6, x_lab = NULL, x_lab_month = FALSE, y_lab = "Date",

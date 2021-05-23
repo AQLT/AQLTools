@@ -18,7 +18,9 @@ graph_ts(
   y_lab = NULL,
   outDec = ",",
   n_xlabel = length(time(data))\%/\%24,
-  n_ylabel = 12
+  n_ylabel = 12,
+  prec_plot,
+  size = 0.7
 )
 }
 \arguments{
@@ -51,6 +53,10 @@ Par exemple, pour des séries trimestrielles cela permet d'avoir un graphique pa
 \item{n_xlabel}{nombre de labels pour l'axe des abscisses (par défaut une année sur deux).}
 
 \item{n_ylabel}{nombre de labels pour l'axe des ordonnées (par défaut 12).}
+
+\item{prec_plot}{graphique à ajouter avant le geom_line}
+
+\item{size}{taille des points.}
 }
 \value{
 Un graphique \code{\link[ggplot2]{ggplot}}.

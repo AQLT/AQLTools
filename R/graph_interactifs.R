@@ -26,6 +26,7 @@
 #' @name hc_ts
 #' @rdname hc_ts
 #' @export
+#' @import highcharter
 hc_lines <- function(data, titre = NULL, sous_titre = NULL,
                      legende = NULL,
                      affiche_legende = TRUE,
@@ -35,8 +36,7 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
-    if(!require(highcharter))
-        stop("Il faut installer highcharter")
+
     time <- time(data)
     freq <- frequency(data)
     dataGraph <- data.frame(cbind(zoo::as.yearmon(time), data))
@@ -93,8 +93,6 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
-    if(!require(highcharter))
-        stop("Il faut installer highcharter")
     list_ts <- as.list(data)
     if (is.null(legende)){
         if(is.mts(data)){

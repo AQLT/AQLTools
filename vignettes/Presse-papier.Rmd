@@ -17,12 +17,11 @@ Un des problèmes auquel l'on est souvent confronté avec l'utilisation de R est
 ## Importer des données depuis un tableur
 
 Pour importer des données depuis le presse-papier, il suffit d'utiliser la fonction `ctrl_v()`. Prenons par exemple le premier tableau de l'*Information Rapide* de l'enquête mensuelle de conjoncture dans l'industrie de juin 2017 (<https://www.insee.fr/fr/statistiques/2875875>) et l'ouvrir avec un tableur (en faisant par exemple un copier/coller) :
+
 ```{r,echo=FALSE}
-require(AQLTools,quietly = T)
-options(OutDec= ",")
 data<-matrix(c("Indicateur synthétique","100","106","108","109","108","Production passée","5","9","17","14","10","Stocks","13","7","6","5","6","Carnets de commandes globaux","-18","-9","-6","-5","-3","Carnets de commandes étrangers","-14","-5","-1","-2","-2","Perspectives personnelles de production","5","11","12","16","13","Perspectives générales de production","-9","3","1","7","17"),
-          nrow=7,byrow = T)
-data<-data.frame(data,stringsAsFactors = F)
+          nrow=7,byrow = TRUE)
+data<-data.frame(data, stringsAsFactors = FALSE)
 data[,-1]<-apply(data[,-1],2,as.numeric)
 colnames(data)<-c("Industrie manufacturière","Moy*","Mars-17","Avr-17","Mai-17","Juin-17")
 knitr::kable(data, caption = "",align=c("l",rep("c",5)))
