@@ -44,7 +44,7 @@ ctrl_v <- function(header = TRUE, row.names, stringsAsFactors = FALSE,
     # Il y a plusieurs colonnes
     if (header) {
       en_tete <- utils::read.delim(text = tableau [1], header = FALSE,
-                            stringsAsFactors = FALSE)
+                            stringsAsFactors = FALSE, ...)
       if(!missing(row.names) && !is.null(row.names)){
           if (is.character(row.names)) {
               if (length(row.names) == 1L) {
@@ -67,7 +67,8 @@ ctrl_v <- function(header = TRUE, row.names, stringsAsFactors = FALSE,
                                      row.names = row.names, ...)
     }else{
         tableau <- utils::read.delim(file = file, header = header,
-                                     stringsAsFactors = stringsAsFactors, dec = dec)
+                                     stringsAsFactors = stringsAsFactors, dec = dec,
+                                     ...)
     }
 
     if (header) {
