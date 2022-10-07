@@ -32,7 +32,7 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
                      affiche_legende = TRUE,
                      x_lab = NULL, y_lab = NULL,
                      outDec = ",", useHTML = FALSE,
-                     digits){
+                     digits = 1){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
@@ -73,7 +73,7 @@ hc_lines <- function(data, titre = NULL, sous_titre = NULL,
             hc_subtitle(text = sous_titre,
                         useHTML = useHTML)
     }
-    if(!missing(digits)){
+    if(!is.null(digits)){
         hc <- hc %>%
             hc_tooltip(pointFormat = sprintf('{series.name}: <b>{point.y:.%if}</b><br/>',
                                              digits))
@@ -89,7 +89,7 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                      x_lab = NULL, y_lab = NULL,
                      outDec = ",", useHTML = FALSE,
                      type = NULL, color = NULL,
-                     digits){
+                     digits = 1){
 
     if (!is.ts(data))
         stop("Il faut que la table en entrée soit de type ts !")
@@ -147,7 +147,7 @@ hc_stocks <- function(data, titre = NULL, sous_titre = NULL,
                         useHTML = useHTML)
     }
 
-    if(!missing(digits)){
+    if(!is.null(digits)){
         hc <- hc %>%
             hc_tooltip(pointFormat = sprintf('{series.name}: <b>{point.y:.%if}</b><br/>',
                                              digits))
