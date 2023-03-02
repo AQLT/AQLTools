@@ -20,11 +20,11 @@ library(AQLTools)
 En fonction de l’ordinateur utilisé (mais surtout du réseau internet
 utilisé) il peut être nécessaire de configurer le proxy (récupérer
 l’adresse en utilisant la commande `curl::ie_get_proxy_for_url()`). Pour
-cela trois solutions :
+cela trois solutions :
 
 1.  Modifier le *.Renviron* de RStudio. Pour cela il suffit de lancer
     sous RStudio la commande `file.edit("~/.Renviron")` et de rajouter
-    les deux lignes suivantes dans le fichier ainsi ouvert :
+    les deux lignes suivantes :
 
 <!-- -->
 
