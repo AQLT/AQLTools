@@ -148,7 +148,7 @@ ts2xls <- function(x, file, sheet="Feuille 1", format = "dd/mm/yyyy"){
 
   csDate <- getOrCreateCellStyle(wb, name = "date")
   setDataFormat(csDate, format = format)
-  date <- as.Date(format(zoo::as.Date((time(x))), "%d/%m/%Y"),
+  date <- as.Date(format(zoo::as.Date(zoo::as.yearmon(time(x))), "%d/%m/%Y"),
                   "%d/%m/%Y")
   writeWorksheet(wb,date,sheet = sheet,startCol = 1,startRow = 2,
                  header = FALSE)
