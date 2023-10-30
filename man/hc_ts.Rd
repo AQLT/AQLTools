@@ -17,7 +17,7 @@ hc_lines(
   y_lab = NULL,
   outDec = ",",
   useHTML = FALSE,
-  digits
+  digits = 1
 )
 
 hc_stocks(
@@ -32,7 +32,7 @@ hc_stocks(
   useHTML = FALSE,
   type = NULL,
   color = NULL,
-  digits
+  digits = 1
 )
 }
 \arguments{
